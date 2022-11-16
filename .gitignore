@@ -1,0 +1,6 @@
+venv
+env
+*.csv
+*.pdf
+*.PDF
+*.ipynb_checkpoints
