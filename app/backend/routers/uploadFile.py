@@ -6,5 +6,6 @@ router = APIRouter()
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    cleaned_csv = clean_file(file)
-    return {cleaned_csv}
+    print(file.filename)
+    cleaned_csv = clean_file(file.filename)
+    return {1}
