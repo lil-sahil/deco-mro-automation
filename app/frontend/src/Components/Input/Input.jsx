@@ -5,9 +5,18 @@ const Input = (props) => {
 
     const inputRef = useRef(null)
 
-    const handleUpload = (e) => {
+    const handleUpload = async (e) => {
         e.preventDefault()
-        console.log(inputRef.current.files[0])
+        const url = new URL("http://localhost:5000")
+        let form = new FormData();
+        form.append("file", inputRef.current.files[0]);
+        let response = await fetch(`${url}upload`, {
+            method: 'POST',
+            body: form
+            });
+
+        let result = await response.json();
+        console.log(result)
     }
 
     const validateUpload = (e) => {
