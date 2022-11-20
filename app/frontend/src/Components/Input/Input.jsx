@@ -69,21 +69,20 @@ const Input = (props) => {
         let form = new FormData();
         form.append("file", inputRef.current.files[0]);
         let params = {
-                    mode:"no-cors",
                     method: 'POST',
                     body: form
                     }
         fetch(`${url}upload`, params)
             .then(res => {
                 const disposition = res.headers.get('Content-Disposition');
+                console.log(disposition)
                 return res.blob();
             })
             .then(blob => {
-                console.log(blob)
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = "test";
+                a.download = "filename";
                 document.body.appendChild(a); // append the element to the dom
                 a.click();
                 a.remove(); // afterwards, remove the element  
