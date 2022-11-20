@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
-from fastapi import Response
+from tempfile import NamedTemporaryFile
 from fastapi.responses import StreamingResponse
-from fastapi.responses import FileResponse
+
 from controllers.uploadFileController import Clean_File
 import os
 import pathlib
@@ -13,14 +13,30 @@ import tabula
 router = APIRouter()
 
 @router.post("/upload")
-async def upload_file(file: UploadFile = File(...), response_class = StreamingResponse):
-    # uploads_dir = pathlib.Path(os.getcwd(), "uploads")
-    # file_name = pathlib.Path(uploads_dir, file.filename)
-    print(os.getcwd())
+async def upload_file(file: UploadFile = File(...)):
+    
 
-    cleaned_df = Clean_File(file.filename).clean_df()
+    # Refer to this stackoverflow post: 
+    # https://stackoverflow.com/questions/70520522/how-to-upload-file-in-fastapi-then-to-amazon-s3-and-finally-process-it
+    temp = NamedTemporaryFile(delete=False)
+    try:
+        try:
+            contents = file.file.read()
+            with temp as f:
+                f.write(contents)
+        except Exception:
+            return {"message": "There was an error uploading the file"}
+        finally:
+            file.file.close()
+        
+        cleaned_df = Clean_File(temp.name).clean_df()
+        
+    except Exception:
+        return {"message": "There was an error processing the file"}
+    finally:
+        #temp.close()  # the `with` statement above takes care of closing the file
+        os.remove(temp.name)  # Delete temp file
 
-    cleaned_df.to_csv('test.csv')
     
     file = StringIO()
     cleaned_df.to_csv(file)
