@@ -19,12 +19,12 @@ const Input = (props) => {
                     }
         fetch(`${url}upload`, params)
             .then(res => {
-                const disposition = res.headers.get('Content-Disposition');
+                // const disposition = res.headers.get('Content-Disposition');
                 return res.blob();
             })
             .then(blob => {
-                var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
                 a.href = url;
                 a.download = "data";
                 document.body.appendChild(a); // append the element to the dom
