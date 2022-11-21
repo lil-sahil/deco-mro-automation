@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    background-color: #1B2430;
+    padding: 10px 40px;
+    color: #ffffff;
+    border-bottom: 3px solid #2980b9;
+}
+
+.title {
+    font-family: 'Rubik Marker Hatch', cursive;
+    font-size: 40px;
+}
+
+.icons {
+    font-size: 40px;
+}
+
+.pdf {
+    color: red;
+}
+
+.csv {
+    color: green;
+}
+
+.github {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+}
+

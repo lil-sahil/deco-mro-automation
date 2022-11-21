@@ -1,5 +1,8 @@
 import React, {useState, useRef} from 'react'
 
+// Styles
+import styles from "./Input.module.css"
+
 const Input = (props) => {
     const [validFile, setValidFile] = useState(false)
 
@@ -41,11 +44,11 @@ const Input = (props) => {
     }
 
   return (
-    <div>
+    <div className={styles["input-main"]}>
         <form action="submit" onSubmit={handleUpload}>
             <input type="file" name="upload" accept="application/pdf" ref={inputRef} onChange={validateUpload}/>
             
-            {validFile === true && <button type='submit'>Submit</button>}
+            {validFile === true && <button type='submit'>Convert!</button>}
         </form>
     </div>
   )

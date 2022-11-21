@@ -5,6 +5,7 @@ import Input from "./Components/Input/Input";
 import Viewer from "./Components/Viewer/Viewer";
 
 // CSS
+import styles from "./App.module.css"
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   const [file, setFile] = useState(null)
 
   return (
-    <div>
+    <div className={styles}>
       <Header/>
       <Input setFile={setFile}/>
 

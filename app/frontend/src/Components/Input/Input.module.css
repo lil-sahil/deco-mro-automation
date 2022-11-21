@@ -1,0 +1,54 @@
+.input-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 100px;
+    overflow:hidden;
+}
+
+input{
+    color: #ffffff;
+    font-size: 20px;
+}
+
+::-webkit-file-upload-button{
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2980b9;
+}
+
+::-webkit-file-upload-button:hover{
+    background-color: #233972;
+    cursor: pointer;
+}
+
+button {
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1B2430;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: black;
+
+}
+
+button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
