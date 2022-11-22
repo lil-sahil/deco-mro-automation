@@ -6,6 +6,7 @@ import tabula
 class Clean_File:
     def __init__(self, file_name):
         self.file_name = file_name
+        print(self.file_name)
         self.df = self.load_pdf_file()
 
     def column_names(self):
