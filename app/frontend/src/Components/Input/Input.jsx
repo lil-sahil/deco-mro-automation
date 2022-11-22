@@ -13,6 +13,8 @@ const Input = (props) => {
         // Refer to this stackoverflow post:
         // https://stackoverflow.com/questions/71191662/how-do-i-download-a-file-from-fastapi-backend-using-fetch-api-in-the-frontend
         e.preventDefault()
+        // http://localhost:5000
+        // http://172.19.10.67:8000
         const url = new URL("http://localhost:5000")
         let form = new FormData();
         form.append("file", inputRef.current.files[0]);
