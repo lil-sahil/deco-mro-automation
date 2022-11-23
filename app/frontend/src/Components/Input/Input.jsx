@@ -15,7 +15,7 @@ const Input = (props) => {
         e.preventDefault()
         // http://localhost:5000
         // http://172.19.10.67:8000
-        const url = new URL("http://localhost:5000")
+        const url = new URL("http://172.19.10.67:8000")
         let form = new FormData();
         form.append("file", inputRef.current.files[0]);
         let params = {
