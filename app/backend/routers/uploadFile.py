@@ -24,13 +24,12 @@ async def upload_file(file: UploadFile = File(...)):
             contents = file.file.read()
             with temp as f:
                 f.write(contents)
-                cleaned_df = Clean_File(f.name).clean_df()
         except Exception:
             return {"message": "There was an error uploading the file"}
         finally:
             file.file.close()
         
-        # cleaned_df = Clean_File(temp.name).clean_df()
+        cleaned_df = Clean_File(temp.name).clean_df()
         
     except Exception:
         return {"message": "There was an error processing the file"}
@@ -40,7 +39,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     
     file = StringIO()
-    cleaned_df.to_csv(file)
+    cleaned_df.to_csv(file, sep=",", header=True)
 
     return StreamingResponse(
         iter([file.getvalue()]),
