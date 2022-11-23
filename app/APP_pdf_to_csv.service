@@ -1,0 +1,13 @@
+[Unit]
+Description=Service for APP to convert pdf to csv.
+After=network.target
+
+[Service]
+User=tempadmin
+Group=tempadmin
+WorkingDirectory=/home/tempadmin/APP_pdf_to_csv/app/backend/
+Environment=PATH=/usr/lib/jvm/default-java:/home/tempadmin/APP_pdf_to_csv/venv/bin
+ExecStart=/home/tempadmin/APP_pdf_to_csv/venv/bin/gunicorn -w 1 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target

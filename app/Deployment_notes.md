@@ -1,0 +1,52 @@
+FastAPI(Backend)
+- Served on Ubuntu server.
+- Ensure that appropriate CORS functionality is set up. Refer to fastapi CORS page for details.
+- Ensure Java is installed on Ubuntu. Use Command: sudo apt install default-jre
+    - User: tempadmin
+    - IP: 172.19.10.67
+    - Parent Directory:
+        - /home/tempadmin/APP_pdf_to_csv
+    -Backend Directory:
+        - /home/tempadmin/APP_pdf_to_csv/app/backend
+    - Command to run using uvicorn (ensure python venv is active by using cmd "source/venv/bin/activate")
+        - uvicorn --host 0.0.0.0 main:app
+    - Gunicorn Deployment
+        - gunicorn -w 1 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+        - At this time the api is functional, and can be reached using the url 172.19.10.67:8000/{some endpoint}
+        - Make sure that port 8000 or whatever port being used by uvicorn is opened. This can be done using the commmands below.
+            - netstat -na | grep :8000
+            - ss -na | grep :8000
+            - sudo ufw allow 8000
+            - Link here: https://www.digitalocean.com/community/tutorials/opening-a-port-on-linux
+    - In order to create a servie to keep the app running, use systemctl and create a .service file.
+        - Directory: /etc/systemd/system
+        - Service file name: APP_pdf_to_csv.service.
+        - Refer to file "APP_pdf_to_csv.service"
+        - Since this app uses the tabula library which requires java, for a systemctl service ensure that the path for java is part of the .service file.
+        - Start the service using: sudo systemctl start APP_pdf_to_csv.service
+        - Enable the service to start on reboot: sudo systemctl enable APP_pdf_to_csv.service
+    - Once the application is running, the following commands can be used:
+        - Check status of service: systemctl status APP_pdf_to_csv
+        - Check any errol logs associated with the servie: journalctl -u APP_pdf_to_csv.service
+
+ReactAPP(Frontend)
+- Served on same Ubuntu server as the backend.
+- Install npm on server.
+- Install nginx.
+    - sudo apt install nginx
+- Nginx configuration:
+    - sudo mkdir /var/www/172.19.10.67   #this is where the code will be stored. So any changes that are made should be made in this directory.
+    - sudo chmod 755 -R /var/www/172.19.10.67
+    - sudo chown -R tempadmin:www-data /var/www/172.19.10.67
+    - sudo nano /etc/nginx/sites-availaible/172.19.10.67
+        - The contents of this file should be as "front_end_nginx.txt".
+    - Unlink the default and link the file that was created.
+        - sudo unlink /etc/nginx/sites-enabled/default
+        - sudo ln -s /etc/nginx/sites-availaible/172.19.10.67 /etc/nginx/sites-enabled/
+    - sudo nginx -t
+    - sudo systemctl restart nginx
+React Code:
+    - npm run build
+    - scp -r build/* tempadmin@172.19.10.67:var/www/172.19.10.67/
+To access the app:
+    - url: http://172.19.10.67
