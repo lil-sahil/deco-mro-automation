@@ -22,7 +22,7 @@ FastAPI(Backend)
         - Directory: /etc/systemd/system
         - Service file name: APP_pdf_to_csv.service.
         - Refer to file "APP_pdf_to_csv.service"
-        - Since this app uses the tabula library which requires java, for a systemctl service ensure that the path for java is part of the .service file.
+        - Since this app uses the tabula library which requires java, for a systemctl service ensure that the path for java is part of the .service file. Refer to this link for more details. https://stackoverflow.com/questions/63377036/systemd-unable-to-find-java. Since default-jre is required for tabula, the path to that is added.
         - Start the service using: sudo systemctl start APP_pdf_to_csv.service
         - Enable the service to start on reboot: sudo systemctl enable APP_pdf_to_csv.service
     - Once the application is running, the following commands can be used:
