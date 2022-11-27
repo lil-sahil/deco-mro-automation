@@ -1,6 +1,7 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from tempfile import NamedTemporaryFile
 from fastapi.responses import StreamingResponse
+
 
 from controllers.uploadFileController import Clean_File
 import os
@@ -22,17 +23,19 @@ async def upload_file(file: UploadFile = File(...)):
     try:
         try:
             contents = file.file.read()
+            print(contents)
             with temp as f:
                 f.write(contents)
         except Exception:
-            return {"message": "There was an error uploading the file"}
+            raise HTTPException(status_code=404, detail="File could not be uploaded")
         finally:
             file.file.close()
         
         cleaned_df = Clean_File(temp.name).clean_df()
         
     except Exception:
-        return {"message": "There was an error processing the file"}
+        raise HTTPException(status_code=404, detail="File could not be processed.")
+
     finally:
         #temp.close()  # the `with` statement above takes care of closing the file
         os.remove(temp.name)  # Delete temp file
