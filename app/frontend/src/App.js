@@ -12,13 +12,15 @@ function App() {
 
 
   const [file, setFile] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className={styles}>
       <Header/>
-      <Input setFile={setFile}/>
+      <Input setFile={setFile} setIsLoading = {setIsLoading}/>
 
       {/* {file != null && <Viewer pdfFileName={file}/>} */}
+      {isLoading === true && <p>"File is being loaded"</p>}
     </div>
   );
 }

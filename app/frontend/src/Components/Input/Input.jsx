@@ -5,29 +5,43 @@ import styles from "./Input.module.css"
 
 const Input = (props) => {
     const [validFile, setValidFile] = useState(false)
+    const [fetchErrorMessg, setFetchErrorMessg] = useState(null)
 
     const inputRef = useRef(null)
 
     const handleUpload = (e) => {
+        e.preventDefault()
+        
+        
+        props.setIsLoading(true)
+        setFetchErrorMessg(null)
 
         // Refer to this stackoverflow post:
         // https://stackoverflow.com/questions/71191662/how-do-i-download-a-file-from-fastapi-backend-using-fetch-api-in-the-frontend
-        e.preventDefault()
         // http://localhost:5000
         // http://172.19.10.67:8000
-        const url = new URL("http://172.19.10.67:8000")
+        const url = new URL("http://localhost:5000")
         let form = new FormData();
         form.append("file", inputRef.current.files[0]);
         let params = {
                     method: 'POST',
                     body: form
                     }
-        fetch(`${url}upload`, params)
+
+        try {
+            fetch(`${url}upload`, params)
             .then(res => {
                 // const disposition = res.headers.get('Content-Disposition');
+                
+                if (res.status !== 200){
+                    console.log("Iamhere")
+                    throw new Error("Unable to convert pdf file.")
+                }
                 return res.blob();
             })
             .then(blob => {
+                props.setIsLoading(false)
+
                 let url = window.URL.createObjectURL(blob);
                 let a = document.createElement('a');
                 a.href = url;
@@ -36,6 +50,13 @@ const Input = (props) => {
                 a.click();
                 a.remove(); // afterwards, remove the element  
             });
+
+        }catch (err){
+            console.log("here!")
+            props.setIsLoading(false)
+            setFetchErrorMessg(err.message)
+        }
+                
     }
 
     const validateUpload = (e) => {
@@ -52,6 +73,7 @@ const Input = (props) => {
             
             {validFile === true && <button type='submit'>Convert!</button>}
         </form>
+        {fetchErrorMessg !== null && <p>{fetchErrorMessg}</p>}
     </div>
   )
 }
