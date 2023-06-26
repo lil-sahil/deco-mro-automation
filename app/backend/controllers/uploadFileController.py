@@ -57,6 +57,18 @@ class Clean_File:
         
         else:
             return x1[7:]
+        
+    def check_sr_number(self, x1, x2):
+        # If the last character is a letter in sr number
+        if(x1[-1].isalpha()):
+            return x1[:-1], x1[-1] + x2
+
+        # If the sr number starts with RSR
+        if(x1[0] == "R"):
+            return x1 + x2[0], x2[1:]
+        
+        else:
+            return x1,x2
 
     def clean_df(self):
         print("I am here")
@@ -116,6 +128,8 @@ class Clean_File:
         
         # Reset the index, so it start from 0.
         self.df.reset_index(drop=True, inplace=True)
+
+        self.df[["Part #", "Description"]] = self.df[["Part #", "Description"]].apply(lambda x: pd.Series(self.check_sr_number(x[0], x[1])), axis=1)
 
         print("Finished!")
 

@@ -28,34 +28,31 @@ const Input = (props) => {
                     body: form
                     }
 
-        try {
-            fetch(`${url}upload`, params)
-            .then(res => {
-                // const disposition = res.headers.get('Content-Disposition');
-                
-                if (res.status !== 200){
-                    console.log("Iamhere")
-                    throw new Error("Unable to convert pdf file.")
-                }
-                return res.blob();
-            })
-            .then(blob => {
-                props.setIsLoading(false)
+        
+        fetch(`${url}upload`, params)
+        .then(res => {
+            // const disposition = res.headers.get('Content-Disposition');
+            
+            if (res.status !== 200){
+                throw new Error("Unable to convert pdf file.")
+            }
+            return res.blob();
+        })
+        .then(blob => {
+            props.setIsLoading(false)
 
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = "data";
-                document.body.appendChild(a); // append the element to the dom
-                a.click();
-                a.remove(); // afterwards, remove the element  
-            });
-
-        }catch (err){
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = "data";
+            document.body.appendChild(a); // append the element to the dom
+            a.click();
+            a.remove(); // afterwards, remove the element  
+        }).catch(err => {
             console.log("here!")
             props.setIsLoading(false)
             setFetchErrorMessg(err.message)
-        }
+        })
                 
     }
 

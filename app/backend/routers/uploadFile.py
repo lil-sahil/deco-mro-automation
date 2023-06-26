@@ -23,7 +23,6 @@ async def upload_file(file: UploadFile = File(...)):
     try:
         try:
             contents = file.file.read()
-            print(contents)
             with temp as f:
                 f.write(contents)
         except Exception:
@@ -33,7 +32,8 @@ async def upload_file(file: UploadFile = File(...)):
         
         cleaned_df = Clean_File(temp.name).clean_df()
         
-    except Exception:
+    except Exception as error:
+        print(error)
         raise HTTPException(status_code=404, detail="File could not be processed.")
 
     finally:
