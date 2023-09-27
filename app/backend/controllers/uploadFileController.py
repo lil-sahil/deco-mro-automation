@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import tabula
+from difflib import SequenceMatcher
 
 
 class Clean_File:
@@ -9,6 +10,13 @@ class Clean_File:
         print(self.file_name)
         self.df = self.load_pdf_file()
         self.part_number_df = pd.read_csv("./srPartNumbers.csv")
+        self.part_number_and_description_df = pd.read_csv(
+            "./dwAndSrPartnumbers.csv")
+
+        # Combine the part number and description 1 into a single column
+
+        self.part_number_and_description_df['combined'] = self.part_number_and_description_df[[
+            'PartNumber', 'Desc1']].apply(lambda x: (x[0] + x[1]).replace(" ", "").lower(), axis=1)
 
     def column_names(self):
         return [
@@ -61,6 +69,27 @@ class Clean_File:
         return True if self.part_number_df[self.part_number_df['LQPART'] == part_number].shape[0] == 1 else False
 
     def check_sr_number(self, x1, x2):
+
+        # Combine the partNUmber and description.
+        combined = (x1 + x2).replace(" ", "").lower()
+
+        # Check if the string matches the combined column of the fact table.
+
+        partFound = self.part_number_and_description_df[
+            self.part_number_and_description_df["combined"] == combined]
+        if (partFound.shape[0] == 1):
+            return partFound['PartNumber'].values[0], partFound['Desc1'].values[0]
+
+        else:
+            s = SequenceMatcher(
+                None, combined, self.part_number_and_description_df[self.part_number_and_description_df['PartNumber'] == x1]['combined'].values[0])
+
+            if (s.ratio() >= 0.90):
+                return x1, x2
+
+            return x1, "****NOT FOUND****"
+
+        # If it matches then return the part number column and the description column.
 
         if (self.check_if_part_number_exists(x1)):
             return x1, x2
