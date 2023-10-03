@@ -9,7 +9,7 @@ class Clean_File:
         self.file_name = file_name
         print(self.file_name)
         self.df = self.load_pdf_file()
-        self.part_number_df = pd.read_csv("./srPartNumbers.csv")
+        # self.part_number_df = pd.read_csv("./srPartNumbers.csv")
         self.part_number_and_description_df = pd.read_csv(
             "./dwAndSrPartnumbers.csv")
 
@@ -69,7 +69,6 @@ class Clean_File:
         return True if self.part_number_df[self.part_number_df['LQPART'] == part_number].shape[0] == 1 else False
 
     def check_sr_number(self, x1, x2):
-
         # Combine the partNUmber and description.
         combined = (x1 + x2).replace(" ", "").lower()
 
@@ -80,14 +79,13 @@ class Clean_File:
         if (partFound.shape[0] == 1):
             return partFound['PartNumber'].values[0], partFound['Desc1'].values[0]
 
-        else:
+        if(self.part_number_and_description_df[self.part_number_and_description_df['PartNumber']== x1].shape[0] == 1):
             s = SequenceMatcher(
                 None, combined, self.part_number_and_description_df[self.part_number_and_description_df['PartNumber'] == x1]['combined'].values[0])
 
             if (s.ratio() >= 0.90):
                 return x1, x2
-
-            return x1, "****NOT FOUND****"
+        return x1, "****NOT FOUND****"
 
         # If it matches then return the part number column and the description column.
 
